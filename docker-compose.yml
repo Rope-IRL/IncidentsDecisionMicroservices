@@ -1,0 +1,39 @@
+networks:
+  employee:
+  tech_support:
+  incidents:
+  auth:
+
+services:
+  incidents:
+    build: 
+      context: ./Incidents
+    ports:
+      - "29170:29170"
+    networks:
+      - incidents 
+  
+  tech_support:
+    build:
+      context: ./TechSupport
+    ports:
+      - "29172:29172"
+    networks:
+      - tech_support
+
+  employee:
+    build:
+      context: ./Employee
+    ports:
+      - "29171:29171"
+    networks:
+      - employee
+
+    auth:
+      build:
+        context: ./Auth
+      ports:
+        - "29174:29174"
+      networks:
+        - auth 
+

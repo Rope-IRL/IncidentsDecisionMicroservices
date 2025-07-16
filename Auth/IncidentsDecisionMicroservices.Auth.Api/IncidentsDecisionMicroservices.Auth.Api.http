@@ -1,0 +1,11 @@
+@IncidentsDecisionMicroservices.Auth.Api_HostAddress = http://127.0.0.1:29173
+
+PUT {{IncidentsDecisionMicroservices.Auth.Api_HostAddress}}/api/employeelogin/
+Accept: application/json
+Content-Type: application/json
+Accept-Language: en-US,en;q=0.5
+
+{
+  "login":"login1@gmail.com",
+  "hashedpassword":"password1"
+}

@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>74e15cd4-a9f6-42fb-8a58-a766635da5a6</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.7" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.7">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\IncidentsDecisionMicroservices.EmployeeLogic.Application\IncidentsDecisionMicroservices.EmployeeLogic.Application.csproj" />
+    <ProjectReference Include="..\IncidentsDecisionMicroservices.EmployeeLogic.Core\IncidentsDecisionMicroservices.EmployeeLogic.Core.csproj" />
+    <ProjectReference Include="..\IncidentsDecisionMicroservices.EmployeeLogic.Persistence\IncidentsDecisionMicroservices.EmployeeLogic.Persistence.csproj" />
+  </ItemGroup>
+
+</Project>
