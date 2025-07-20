@@ -3,4 +3,4 @@
 
 # Architecture
 
-![This is frontend and backend interaction](images/RefactoredArcWithBackground.svg)
+![This is frontend and backend interaction](images/AddedArc.excalidraw.svg)
