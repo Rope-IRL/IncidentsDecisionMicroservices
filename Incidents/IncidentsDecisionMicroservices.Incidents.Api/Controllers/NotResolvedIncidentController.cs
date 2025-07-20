@@ -9,7 +9,8 @@ public class NotResolvedIncidentController(INotResolvedIncidentService service) 
 {
     [HttpGet]
     [Authorize(Roles = "Employee,TechSupport")]
-    public async Task<ActionResult<IEnumerable<NotResolvedIncidentDto>>> GetNotResolvedIncidents(CancellationToken cancellationToken)
+    public async Task<ActionResult<IEnumerable<NotResolvedIncidentDto>>> GetNotResolvedIncidents(
+        CancellationToken cancellationToken)
     {
         var NotResolvedIncidents = await service.GetNotResolvedIncidents(cancellationToken);
 
@@ -18,7 +19,8 @@ public class NotResolvedIncidentController(INotResolvedIncidentService service) 
 
     [HttpGet("{id:int}")]
     [Authorize(Roles = "Employee,TechSupport")]
-    public async Task<ActionResult<NotResolvedIncidentDto>> GetNotResolvedIncidentById(int id, CancellationToken cancellationToken)
+    public async Task<ActionResult<NotResolvedIncidentDto>> GetNotResolvedIncidentById(
+        int id, CancellationToken cancellationToken)
     {
         var NotResolvedIncidentResult = await service.GetNotResolvedIncidentById(id, cancellationToken);
         if (NotResolvedIncidentResult.IsSuccess == false)
@@ -31,7 +33,8 @@ public class NotResolvedIncidentController(INotResolvedIncidentService service) 
 
     [HttpPost]
     [Authorize(Roles = "TechSupport")]
-    public async Task<ActionResult<NotResolvedIncidentDto>> UpdateNotResolvedIncident([FromBody] NotResolvedIncidentUpdateDto dto, CancellationToken cancellationToken)
+    public async Task<ActionResult<NotResolvedIncidentDto>> UpdateNotResolvedIncident(
+        [FromBody] NotResolvedIncidentUpdateDto dto, CancellationToken cancellationToken)
     {
         var NotResolvedIncidentResult = await service.UpdateNotResolvedIncident(dto, cancellationToken);
 
@@ -44,8 +47,10 @@ public class NotResolvedIncidentController(INotResolvedIncidentService service) 
     }
 
     [HttpPut]
-    [Authorize(Roles = "Employee,TechSupport")]
-    public async Task<ActionResult<NotResolvedIncidentDto>> CreateNotResolvedIncident([FromBody] NotResolvedIncidentCreateDto dto, CancellationToken cancellationToken)
+    //[Authorize(Roles = "Employee,TechSupport")]
+    public async Task<ActionResult<NotResolvedIncidentDto>> CreateNotResolvedIncident(
+        [FromBody] NotResolvedIncidentCreateDto dto, 
+        CancellationToken cancellationToken)
     {
         var NotResolvedIncidentResult = await service.CreateNotResolvedIncident(dto, cancellationToken);
 
@@ -59,7 +64,8 @@ public class NotResolvedIncidentController(INotResolvedIncidentService service) 
 
     [HttpDelete("{id:int}")]
     [Authorize(Roles = "TechSupport")]
-    public async Task<ActionResult> DeleteNotResolvedIncident(int id, CancellationToken cancellationToken)
+    public async Task<ActionResult> DeleteNotResolvedIncident(int id, 
+        CancellationToken cancellationToken)
     {
         var NotResolvedIncidentResult = await service.DeleteNotResolvedIncident(id, cancellationToken);
 

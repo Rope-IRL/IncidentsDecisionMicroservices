@@ -1,16 +1,13 @@
-using IncidentsDecisionMicroservices.Incidents.Api.Initializers;
-using IncidentsDecisionMicroservices.Incidents.Application.Interfaces;
-using IncidentsDecisionMicroservices.Incidents.Application.RabbitMqService;
-using IncidentsDecisionMicroservices.Incidents.Application.RabbitMqService.NotResolvedIncidentService;
-using IncidentsDecisionMicroservices.Incidents.Application.Services;
-using IncidentsDecisionMicroservices.Incidents.Persistence;
+using IncidentsDecisionMicroservices.Notifications.Api.BackgroundServices;
+using IncidentsDecisionMicroservices.Notifications.Api.Hubs;
+using IncidentsDecisionMicroservices.Notifications.Api.Initializers;
+using IncidentsDecisionMicroservices.Notifications.Application.RabbitMqService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Services.AddOpenApi();
 var corsName = "AllowAny";
 
 builder.Services.AddCors(options =>
@@ -25,29 +22,12 @@ builder.Services.AddCors(options =>
         });
 });
 
-// Add services to the container.
-
-builder.Services.AddControllers();
-
-builder.Services.AddOpenApi();
-
 if (builder.Environment.IsDevelopment())
 {
     builder.Configuration.AddUserSecrets<Program>();
 }
 
-builder.Services.AddDbContext<IncidentDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresConnection")));
-
-builder.Services.AddSingleton<IRabbitMqService, RabbitMqService>();
-builder.Services.AddSingleton<INotResolvedIncidentNotifier, NotResolvedIncidentNotifier>();
-builder.Services.AddHostedService<RabbitMqInitializer>();
-
-builder.Services.AddScoped<INotResolvedIncidentRepository, NotResolvedIncidentRepository>();
-builder.Services.AddScoped<INotResolvedIncidentService, NotResolvedIncidentService>();
-
-builder.Services.AddScoped<IResolvedIncidentRepository, ResolvedIncidentRepository>();
-builder.Services.AddScoped<IResolvedIncidentService, ResolvedIncidentService>();
+builder.Services.AddSignalR();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(o =>
@@ -74,6 +54,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddAuthorization();
 
+builder.Services.AddSingleton<IRabbitMqService, RabbitMqService>();
+
+builder.Services.AddHostedService<RabbitMqInitializer>();
+builder.Services.AddHostedService<NotResolvedIncidentBackgroundService>();
+
 var app = builder.Build();
 app.UseCors(corsName);
 
@@ -84,10 +69,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllers();
-
+app.MapHub<NotResolvedIncidentNotificationHub>("/api/watch/notresolvedincident");
 app.Run();
+

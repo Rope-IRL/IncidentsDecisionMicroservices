@@ -71,7 +71,8 @@ public class ResolvedIncidentService(IResolvedIncidentRepository repo) : IResolv
             return Result<ResolvedIncidentDto>.Failure(updateRes.Error);
         }
 
-        var res = Result<ResolvedIncidentDto>.Success(ResolvedIncidentMapper.FromDomainToDto(updateRes.Value));
+        var res = Result<ResolvedIncidentDto>.Success(ResolvedIncidentMapper.FromDomainToDto(
+            updateRes.Value));
 
         return res;
     }

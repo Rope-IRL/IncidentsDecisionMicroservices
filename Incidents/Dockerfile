@@ -19,8 +19,8 @@ RUN dotnet publish -c Release -o /app/publish
 
 #Run
 FROM mcr.microsoft.com/dotnet/aspnet:9.0
-ENV ASPNETCORE_HTTP_PORTS=29170
-EXPOSE 29170
+# ENV ASPNETCORE_HTTP_PORTS=29170
+# EXPOSE 29170
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "IncidentsDecisionMicroservices.Incidents.Api.dll"]

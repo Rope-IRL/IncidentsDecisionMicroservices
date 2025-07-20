@@ -16,5 +16,6 @@ public class EmployeeLoginConfiguration : IEntityTypeConfiguration<EmployeeLogin
         builder.Property(e => e.HashedPassword)
             .HasMaxLength(200);
 
+        builder.Property(e => e.EmployeeId);
     }
 }

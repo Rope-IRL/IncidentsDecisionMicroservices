@@ -1,14 +1,18 @@
 using IncidentsDecisionMicroservices.Incidents.Application.DTO.NotResolvedIncidentDtos;
 using IncidentsDecisionMicroservices.Incidents.Application.Interfaces;
 using IncidentsDecisionMicroservices.Incidents.Application.Mappers;
+using IncidentsDecisionMicroservices.Incidents.Application.RabbitMqService;
+using IncidentsDecisionMicroservices.Incidents.Application.RabbitMqService.NotResolvedIncidentService;
 using IncidentsDecisionMicroservices.Incidents.Core.Helpers;
 using IncidentsDecisionMicroservices.Incidents.Core.Models.NotResolvedIncident;
 
 namespace IncidentsDecisionMicroservices.Incidents.Application.Services;
 
-public class NotResolvedIncidentService(INotResolvedIncidentRepository repo) : INotResolvedIncidentService
+public class NotResolvedIncidentService(INotResolvedIncidentRepository repo,
+    INotResolvedIncidentNotifier notifier) : INotResolvedIncidentService
 {
-    public async Task<IEnumerable<NotResolvedIncidentDto>> GetNotResolvedIncidents(CancellationToken cancellationToken)
+    public async Task<IEnumerable<NotResolvedIncidentDto>> GetNotResolvedIncidents(
+        CancellationToken cancellationToken)
     {
         var NotResolvedIncidents = await repo.GetNotResolvedIncidents(cancellationToken);
         var NotResolvedIncidentDtos = new List<NotResolvedIncidentDto>();
@@ -20,7 +24,8 @@ public class NotResolvedIncidentService(INotResolvedIncidentRepository repo) : I
         return NotResolvedIncidentDtos;
     }
 
-    public async Task<Result<NotResolvedIncidentDto>> GetNotResolvedIncidentById(int id, CancellationToken cancellationToken)
+    public async Task<Result<NotResolvedIncidentDto>> GetNotResolvedIncidentById(int id, 
+        CancellationToken cancellationToken)
     {
         var NotResolvedIncidentResult = await repo.GetNotResolvedIncidentById(id, cancellationToken);
 
@@ -29,12 +34,15 @@ public class NotResolvedIncidentService(INotResolvedIncidentRepository repo) : I
             return Result<NotResolvedIncidentDto>.Failure(NotResolvedIncidentResult.Error);
         }
 
-        var NotResolvedIncident = NotResolvedIncidentMapper.FromDomainToDto(NotResolvedIncidentResult.Value);
+        var NotResolvedIncident = NotResolvedIncidentMapper.FromDomainToDto(
+            NotResolvedIncidentResult.Value);
 
         return Result<NotResolvedIncidentDto>.Success(NotResolvedIncident);
     }
 
-    public async Task<Result<NotResolvedIncidentDto>> CreateNotResolvedIncident(NotResolvedIncidentCreateDto dto, CancellationToken cancellationToken)
+    public async Task<Result<NotResolvedIncidentDto>> CreateNotResolvedIncident(
+        NotResolvedIncidentCreateDto dto, 
+        CancellationToken cancellationToken)
     {
         var NotResolvedIncidentResult = NotResolvedIncidentMapper.FromCreateDtoToDomain(dto);
 
@@ -43,14 +51,17 @@ public class NotResolvedIncidentService(INotResolvedIncidentRepository repo) : I
             return Result<NotResolvedIncidentDto>.Failure(NotResolvedIncidentResult.Error);
         }
 
-        var createRes = await repo.CreateNotResolvedIncident(NotResolvedIncidentResult.Value, cancellationToken);
+        var createRes = await repo.CreateNotResolvedIncident(NotResolvedIncidentResult.Value, 
+            cancellationToken);
 
         if (createRes.IsSuccess == false)
         {
             return Result<NotResolvedIncidentDto>.Failure(createRes.Error);
         }
 
+
         var res = Result<NotResolvedIncidentDto>.Success(NotResolvedIncidentMapper.FromDomainToDto(createRes.Value));
+        notifier.SendMessageToQueue(createRes.Value);
 
         return res;
     }
@@ -76,7 +87,8 @@ public class NotResolvedIncidentService(INotResolvedIncidentRepository repo) : I
         return res;
     }
 
-    public async Task<Result<NotResolvedIncident>> DeleteNotResolvedIncident(int id, CancellationToken cancellationToken)
+    public async Task<Result<NotResolvedIncident>> DeleteNotResolvedIncident(int id, 
+        CancellationToken cancellationToken)
     {
         var NotResolvedIncidentRes = await repo.DeleteNotResolvedIncident(id, cancellationToken);
 

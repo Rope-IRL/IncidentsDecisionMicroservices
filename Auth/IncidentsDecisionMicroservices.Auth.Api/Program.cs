@@ -21,7 +21,8 @@ builder.Services.AddCors(options =>
                 .AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials();
-    });
+        }
+    );
 });
 
 if (builder.Environment.IsDevelopment())
@@ -72,6 +73,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddAuthorization();
 var app = builder.Build();
+app.UseCors(corsName);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

@@ -14,5 +14,7 @@ public class TechSupportLoginConfiguration : IEntityTypeConfiguration<TechSuppor
 
         builder.Property(e => e.HashedPassword)
             .HasMaxLength(200);
+
+        builder.Property(e => e.SupportId);
     }
 }

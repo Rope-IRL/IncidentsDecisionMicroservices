@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>1b3d491f-883d-44f9-843a-402d72ee7610</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.7" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\IncidentsDecisionMicroservices.Notifications.Application\IncidentsDecisionMicroservices.Notifications.Application.csproj" />
+    <ProjectReference Include="..\IncidentsDecisionMicroservices.Notifications.Core\IncidentsDecisionMicroservices.Notifications.Core.csproj" />
+    <ProjectReference Include="..\IncidentsDecisionMicroservices.Notifications.Persistence\IncidentsDecisionMicroservices.Notifications.Persistence.csproj" />
+  </ItemGroup>
+
+</Project>

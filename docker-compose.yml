@@ -3,6 +3,7 @@ networks:
   tech_support:
   incidents:
   auth:
+  notifications:
 
 services:
   incidents:
@@ -33,7 +34,14 @@ services:
       build:
         context: ./Auth
       ports:
-        - "29174:29174"
+        - "29173:29173"
       networks:
         - auth 
 
+    notifications:
+      build:
+        context: ./Notifications
+      ports:
+        - "29174:29174"
+      networks:
+        - notifications 
